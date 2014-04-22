@@ -4,7 +4,7 @@
 cd ~
 mkdir source
 cd source
-svn co https://xmlrpc-c.svn.sourceforge.net/svnroot/xmlrpc-c/stable xmlrpc
+svn co https://svn.code.sf.net/p/xmlrpc-c/code/stable xmlrpc
 curl http://libtorrent.rakshasa.no/downloads/libtorrent-0.13.3.tar.gz | tar xz
 curl http://libtorrent.rakshasa.no/downloads/rtorrent-0.9.3.tar.gz | tar xz
 
