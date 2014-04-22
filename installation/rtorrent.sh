@@ -1,7 +1,6 @@
 #!/bin/bash
 # RTorrent Compilation and Installation
 
-$username = "rutorrent"
 
 echo 'Installing packages...'
 
@@ -19,7 +18,7 @@ chmod 600 /etc/apache2/apache.pem
 
 
 echo 'Creating a password protection for Apache'
-htdigest -c /etc/apache2/htpasswd rutorrent $username
+htdigest -c /etc/apache2/htpasswd rutorrent rutorrent
 
 echo 'Activate SSL with ports 443'
 emacs /etc/apache2/ports.conf
