@@ -1,35 +1,28 @@
 #!/bin/bash
-# RTorrent Compilation and Installation
+# Compilation and Installation of RTorrent
 
+cd ~
+mkdir source
+cd source
+svn co https://xmlrpc-c.svn.sourceforge.net/svnroot/xmlrpc-c/stable xmlrpc
+curl http://libtorrent.rakshasa.no/downloads/libtorrent-0.13.3.tar.gz | tar xz
+curl http://libtorrent.rakshasa.no/downloads/rtorrent-0.9.3.tar.gz | tar xz
 
-echo 'Installing packages...'
+cd xmlrpc
+./configure --prefix=/usr --enable-libxml2-backend --disable-libwww-client --disable-wininet-client --disable-abyss-server --disable-cgi-server
+make
+make install
 
-aptitude update && aptitude install -y apache2 apache2-utils autoconf build-essential ca-certificates comerr-dev libapache2-mod-php5 libcloog-ppl-dev libcppunit-dev libcurl3 libcurl4-openssl-dev libncurses5-dev ncurses-base ncurses-term libterm-readline-gnu-perl libsigc++-2.0-dev libssl-dev libtool libxml2-dev ntp openssl patch libperl-dev php5 php5-cli php5-dev php5-fpm php5-curl php5-geoip php5-mcrypt php5-xmlrpc pkg-config python-scgi dtach ssl-cert subversion unrar zlib1g-dev pkg-config unzip htop irssi curl cfv
+cd ../libtorrent-0.13.3
+./autogen.sh
+./configure --prefix=/usr
+make -j2
+sudo make install
 
-echo 'Activate SSL and auth_digest for apache2'
+cd ../rtorrent-0.9.3
+./autogen.sh
+./configure --prefix=/usr --with-xmlrpc-c
+make -j2
+sudo make install
 
-a2enmod ssl
-a2enmod auth_digest
-
-# Certificate creation for https
-echo 'Create SSL certificate'
-openssl req -new -x509 -days 365 -nodes -newkey rsa:2048 -out /etc/apache2/apache.pem -keyout /etc/apache2/apache.pem
-chmod 600 /etc/apache2/apache.pem
-
-
-echo 'Creating a password protection for Apache'
-htdigest -c /etc/apache2/htpasswd rutorrent rutorrent
-
-echo 'Activate SSL with ports 443'
-emacs /etc/apache2/ports.conf
-
-echo "You should now do those actions : 
-> Set Timeout to minimum 30 and ServerTokens to Prod
-> emacs /etc/apache2/apache2.conf
-> emacs /etc/apache2/sites-available/default
-> a2ensite default-ssl
-> 
->Activate SSL with ports 443
-> emacs /etc/apache2/ports.conf
-> /etc/init.d/apache2 restart
-> "
+sudo ldconfig
